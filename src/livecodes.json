@@ -1,0 +1,32 @@
+{
+  "title": "DeepAI Code Snippet",
+  "description": "",
+  "head": "<meta charset=\"UTF-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />",
+  "htmlAttrs": "lang=\"en\" class=\"\"",
+  "tags": [],
+  "activeEditor": "markup",
+  "markup": {
+    "language": "html",
+    "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n<title>CYBER DT - PREMIUM</title>\n<meta name=\"referrer\" content=\"no-referrer-when-downgrade\" />\n<link rel=\"icon\" type=\"image/png\" href=\"https://i.ibb.co/GQ65k7yC/cyber-dt-logo.png\" />\n\n<style>\n    body { background-color: #030308; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; user-select: none; overflow: hidden; }\n\n    #watermark { position: absolute; color: rgba(0, 242, 255, 0.15); font-size: 14px; font-weight: bold; z-index: 2000; pointer-events: none; white-space: nowrap; text-transform: uppercase; display: none; }\n\n    #login-screen { text-align: center; background: #0a0a12; padding: 40px; border-radius: 15px; border: 2px solid #00f2ff; box-shadow: 0 0 30px rgba(0, 242, 255, 0.4); z-index: 100; width: 300px; }\n    input[type=\"password\"] { background: #111; border: 1px solid #00f2ff; color: #00f2ff; padding: 12px; border-radius: 5px; width: 80%; text-align: center; outline: none; margin-bottom: 20px; font-size: 1.1rem; }\n\n    button { background: #00f2ff; color: black; border: none; padding: 12px 30px; font-weight: bold; cursor: pointer; border-radius: 5px; text-transform: uppercase; transition: 0.3s; width: 90%; }\n    button:hover { background: white; box-shadow: 0 0 15px #00f2ff; }\n\n    #content-screen { display: none; width: 95%; max-width: 850px; text-align: center; position: relative; padding: 20px; }\n\n    .video-container {\n        position: relative;\n        width: 100%;\n        padding-bottom: 56.25%; /* 16:9 Aspect Ratio */\n        border: 2px solid #00f2ff;\n        border-radius: 12px;\n        box-shadow: 0 0 25px rgba(0, 242, 255, 0.4);\n        overflow: hidden;\n        background: #000;\n        margin-bottom: 20px;\n    }\n\n    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }\n\n    .pdf-box {\n        background: rgba(0, 242, 255, 0.05);\n        padding: 20px;\n        border-radius: 10px;\n        border: 1px solid rgba(0, 242, 255, 0.2);\n    }\n\n    .pdf-btn {\n        display: inline-block;\n        background: transparent;\n        color: #00f2ff;\n        border: 1px solid #00f2ff;\n        padding: 10px 20px;\n        margin: 10px;\n        text-decoration: none;\n        font-size: 0.9rem;\n        border-radius: 4px;\n        transition: 0.3s;\n        text-transform: uppercase;\n        font-weight: bold;\n    }\n\n    .pdf-btn:hover { background: #00f2ff; color: black; box-shadow: 0 0 10px #00f2ff; }\n\n    .brand-text { color: #00f2ff; font-weight: bold; text-shadow: 0 0 10px #00f2ff; margin-top: 15px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7; font-size: 0.8rem; }\n</style>\n</head>\n<body oncontextmenu=\"return false;\">\n\n<div id=\"watermark\">CYBER DT - PREMIUM</div>\n\n<div id=\"login-screen\">\n    <h1 style=\"color: #00f2ff; letter-spacing: 3px; margin-top: 0;\">CYBER DT</h1>\n    <p style=\"color: #aaa; font-size: 0.8rem; margin-bottom: 20px;\">ACCESS ENCRYPTED PORTAL</p>\n    <input type=\"password\" id=\"passInput\" placeholder=\"ENTER KEY\" />\n    <br>\n    <button onclick=\"checkPassword()\">Unlock Now</button>\n</div>\n\n<div id=\"content-screen\">\n    <h1 style=\"color: #00f2ff; font-size: 1.5rem; margin-bottom: 15px;\">PREMIUM ACCESS GRANTED</h1>\n\n    <div class=\"video-container\">\n        <iframe id=\"video-player\" \n            src=\"\" \n            allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write\" \n            allowfullscreen>\n        </iframe>\n    </div>\n\n    <div class=\"pdf-box\">\n        <h3 style=\"color: #00f2ff; font-size: 0.9rem; margin-top: 0;\">📚 DOWNLOAD MATERIALS</h3>\n        <a href=\"https://pdflink.to/cyberdt1/\" target=\"_blank\" class=\"pdf-btn\">📄 Document 01</a>\n        <a href=\"https://pdflink.to/cyberdt/\" target=\"_blank\" class=\"pdf-btn\">📄 Document 02</a>\n    </div>\n\n    <div class=\"brand-text\">SECURE SERVER 2.4 - CYBER DT</div>\n</div>\n\n<script>\nfunction checkPassword() {\n    const pass = document.getElementById('passInput').value;\n    if (pass === \"CYBERDT2026\") {\n        document.getElementById('login-screen').style.display = 'none';\n        document.getElementById('content-screen').style.display = 'block';\n        document.getElementById('watermark').style.display = 'block';\n\n        // YouTube Live Stream Video ID\n        const youtubeVideoID = \"Ds0CStgHS3Q\"; \n        const youtubeEmbedURL = `https://www.youtube.com/embed/${youtubeVideoID}?autoplay=1`;\n\n        document.getElementById('video-player').src = youtubeEmbedURL;\n\n        startWatermark();\n    } else { \n        alert(\"මුරපදය වැරදියි! (Access Denied)\"); \n    }\n}\n\nfunction startWatermark() {\n    const wm = document.getElementById('watermark');\n    setInterval(() => {\n        const x = Math.random() * (window.innerWidth - 150);\n        const y = Math.random() * (window.innerHeight - 50);\n        wm.style.left = x + 'px';\n        wm.style.top = y + 'px';\n    }, 5000);\n}\n\n// Security\ndocument.addEventListener('contextmenu', e => e.preventDefault());\ndocument.onkeydown = function(e) {\n    if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) {\n        return false;\n    }\n};\n</script>\n</body>\n</html>"
+  },
+  "style": {
+    "language": "css",
+    "content": ""
+  },
+  "script": {
+    "language": "javascript",
+    "content": ""
+  },
+  "stylesheets": [],
+  "scripts": [],
+  "cssPreset": "",
+  "processors": [],
+  "customSettings": {},
+  "imports": {},
+  "types": {},
+  "tests": {
+    "language": "typescript",
+    "content": ""
+  },
+  "version": "48"
+}
