@@ -1,0 +1,8 @@
+{
+  "name": "Copy of Copy of DT Chat",
+  "description": "A high-performance, AI-enhanced Telegram-style messaging interface powered by Gemini. Features intelligent summaries, smart replies, and a modern chat experience.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DT Chat - Liquid Glass</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(45deg, #f3f4f6, #e5e7eb, #d1d5db);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+    }
+    .dark body {
+      background: linear-gradient(45deg, #0f0f0f, #1a1a1a, #0a0a0a);
+    }
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .dark .glass {
+      background: rgba(28, 28, 28, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+    
+    input:focus { outline: none; }
+  </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "@google/genai": "https://esm.sh/@google/genai@1.41.0",
+    "telegram": "https://esm.sh/telegram@2.22.2",
+    "telegram/sessions": "https://esm.sh/telegram@2.22.2/sessions/index.js",
+    "gramjs": "https://esm.sh/telegram@2.22.2",
+    "gramjs/sessions": "https://esm.sh/telegram@2.22.2/sessions/index.js",
+    "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
+    "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
+  }
+}
+</script>
+<script type="module">
+  import { Buffer } from 'https://esm.sh/buffer@6.0.3';
+  window.Buffer = Buffer;
+  window.process = { env: {} };
+  
+  // Suppress "Running gramJS version undefined" noise
+  const originalLog = console.info;
+  console.info = (...args) => {
+    if (typeof args[0] === 'string' && args[0].includes('gramJS version')) return;
+    originalLog.apply(console, args);
+  };
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="transition-colors duration-500">
+  <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
