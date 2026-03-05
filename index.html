@@ -1,80 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DT Chat - Liquid Glass</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      overflow: hidden;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(45deg, #f3f4f6, #e5e7eb, #d1d5db);
-      background-size: 400% 400%;
-      animation: gradient 15s ease infinite;
-    }
-    .dark body {
-      background: linear-gradient(45deg, #0f0f0f, #1a1a1a, #0a0a0a);
-    }
-    @keyframes gradient {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .glass {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    .dark .glass {
-      background: rgba(28, 28, 28, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
-    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>CYBER DT - PREMIUM WEB</title>
+<link rel="icon" type="image/png" href="https://i.ibb.co/GQ65k7yC/cyber-dt-logo.png" />
+
+<style>
+    :root { --neon: #00f2ff; --bg: #030308; --card: #0a0a12; --live: #ff0000; --trans: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; user-select: none; overflow-x: hidden; }
     
-    input:focus { outline: none; }
-  </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "@google/genai": "https://esm.sh/@google/genai@1.41.0",
-    "telegram": "https://esm.sh/telegram@2.22.2",
-    "telegram/sessions": "https://esm.sh/telegram@2.22.2/sessions/index.js",
-    "gramjs": "https://esm.sh/telegram@2.22.2",
-    "gramjs/sessions": "https://esm.sh/telegram@2.22.2/sessions/index.js",
-    "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
-    "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
-  }
-}
-</script>
-<script type="module">
-  import { Buffer } from 'https://esm.sh/buffer@6.0.3';
-  window.Buffer = Buffer;
-  window.process = { env: {} };
-  
-  // Suppress "Running gramJS version undefined" noise
-  const originalLog = console.info;
-  console.info = (...args) => {
-    if (typeof args[0] === 'string' && args[0].includes('gramJS version')) return;
-    originalLog.apply(console, args);
-  };
-</script>
-<link rel="stylesheet" href="/index.css">
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--neon); border-radius: 10px; }
+
+    .nav-bar { position: fixed; top: 0; width: 100%; background: rgba(10, 10, 18, 0.98); display: none; justify-content: center; padding: 18px 0; border-bottom: 1px solid var(--neon); z-index: 1000; backdrop-filter: blur(20px); }
+    .nav-bar a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; text-transform: uppercase; font-size: 0.7rem; cursor: pointer; transition: 0.3s; letter-spacing: 1.2px; }
+    .nav-bar a:hover, .nav-bar a.active { color: var(--neon); text-shadow: 0 0 15px var(--neon); }
+
+    #login-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+    .login-box { text-align: center; background: var(--card); padding: 50px 40px; border-radius: 20px; border: 2px solid var(--neon); width: 340px; box-shadow: 0 0 30px rgba(0, 242, 255, 0.1); }
+    input { background: #111; border: 1px solid var(--neon); color: var(--neon); padding: 14px; border-radius: 8px; width: 100%; text-align: center; outline: none; margin-bottom: 15px; font-size: 1rem; }
+
+    #content-screen { display: none; padding-top: 100px; text-align: center; }
+    .page-section { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; animation: slideUp 0.6s ease; }
+    .page-section.active { display: block; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    .hero { padding: 40px 20px; background: linear-gradient(135deg, rgba(0, 242, 255, 0.1) 0%, transparent 100%); border-radius: 30px; margin-bottom: 40px; border: 1px solid rgba(0, 242, 255, 0.05); }
+    .section-title { font-size: 1.3rem; color: var(--neon); margin: 30px 0 20px; text-transform: uppercase; text-align: left; border-left: 5px solid var(--neon); padding-left: 15px; }
+
+    .folder-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .folder-card { background: var(--card); border: 1px solid rgba(0, 242, 255, 0.1); border-radius: 15px; overflow: hidden; transition: 0.3s; text-align: left; }
+    .folder-card:hover { transform: translateY(-5px); border-color: var(--neon); }
+    .folder-thumb { width: 100%; height: 160px; background-size: cover; background-position: center; }
+    .folder-content { padding: 15px; }
+    
+    .view-btn { background: transparent; border: 1px solid var(--neon); color: var(--neon); padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+    .view-btn:hover { background: var(--neon); color: black; box-shadow: 0 0 15px var(--neon); }
+
+    .resource-box { background: rgba(0, 242, 255, 0.05); padding: 20px; border-radius: 15px; border: 1px dashed var(--neon); margin-bottom: 30px; text-align: left; }
+    .pdf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 10px; }
+    .pdf-link { display: flex; justify-content: space-between; background: #000; color: #fff; border: 1px solid #333; padding: 12px 15px; text-decoration: none; border-radius: 10px; font-size: 0.85rem; transition: 0.3s; }
+    .pdf-link:hover { border-color: var(--neon); color: var(--neon); }
+
+    .video-wrapper { position: relative; width: 100%; padding-bottom: 56.25%; border: 1px solid var(--neon); border-radius: 15px; overflow: hidden; background: #000; }
+    .video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    #watermark { position: fixed; color: rgba(0, 242, 255, 0.05); font-size: 13px; z-index: 3000; pointer-events: none; display: none; }
+    
+    .contact-link { display: block; background: #111; color: var(--neon); padding: 15px; margin: 10px 0; text-decoration: none; border-radius: 10px; border: 1px solid #333; transition: 0.3s; }
+    .contact-link:hover { border-color: var(--neon); background: rgba(0, 242, 255, 0.1); }
+</style>
 </head>
-<body class="transition-colors duration-500">
-  <div id="root"></div>
-<script type="module" src="/index.tsx"></script>
+<body oncontextmenu="return false;">
+
+<div id="watermark">CYBER DT SECURED</div>
+
+<div id="login-screen">
+    <div class="login-box">
+        <h1 style="color: var(--neon); letter-spacing: 3px;">CYBER DT</h1>
+        <p style="font-size: 0.7rem; color: #777; margin-bottom: 15px;">PREMIUM PORTAL ACCESS</p>
+        <input type="text" id="regName" placeholder="YOUR NAME" />
+        <button class="view-btn" style="background: var(--neon); color: black; margin-bottom: 20px;" onclick="requestKey()">Request Access</button>
+        <div style="border-top: 1px solid #222; margin-bottom: 20px;"></div>
+        <input type="password" id="passInput" placeholder="ENTER ACCESS KEY" />
+        <button class="view-btn" onclick="checkPassword()">Unlock</button>
+    </div>
+</div>
+
+<nav id="nav-tabs" class="nav-bar">
+    <a onclick="showPage('home')" id="btn-home" class="active">Home</a>
+    <a onclick="showPage('live')" id="btn-live">Live</a>
+    <a onclick="showPage('videos')" id="btn-videos">Library</a>
+    <a onclick="showPage('contact')" id="btn-contact">Contact</a>
+</nav>
+
+<div id="content-screen">
+    
+    <div id="home" class="page-section active">
+        <div class="hero">
+            <h1>CYBER DT EDUCATION WEB 🕸 </h1>
+            <p>Official Portal. High-Speed & Secured.</p>
+        </div>
+        
+        <div class="section-title">Tutorials</div>
+        <div class="folder-grid">
+            <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/OgSA_lg0bjg/hqdefault.jpg');"></div><div class="folder-content"><h3>Recover Messages</h3><button class="view-btn" onclick="playMedia('youtube', 'OgSA_lg0bjg')">Watch</button></div></div>
+            <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/sVKnEvCmKiY/hqdefault.jpg');"></div><div class="folder-content"><h3>Status Saver</h3><button class="view-btn" onclick="playMedia('youtube', 'sVKnEvCmKiY')">Watch</button></div></div>
+            <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/OEiwyITC5Kg/hqdefault.jpg');"></div><div class="folder-content"><h3>Time Management</h3><button class="view-btn" onclick="playMedia('youtube', 'OEiwyITC5Kg')">Watch</button></div></div>
+            <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/rMQjvO2290k/hqdefault.jpg');"></div><div class="folder-content"><h3>App Install Fix</h3><button class="view-btn" onclick="playMedia('youtube', 'rMQjvO2290k')">Watch</button></div></div>
+        </div>
+    </div>
+
+    <div id="live" class="page-section">
+        <div class="section-title">Live Broadcast</div>
+        <div id="live-container"></div>
+    </div>
+
+    <div id="videos" class="page-section">
+        <div id="main-library-view">
+            <div class="section-title">Collections</div>
+            <div class="folder-grid">
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://media.themoviedb.org/t/p/w780/yfiJyg8QhlPXdhPFieKZqp1171v.jpg');"></div><div class="folder-content"><h3>SOORYA (2025)</h3><button class="view-btn" onclick="playMedia('vimeo', '1159452386')">Play Movie</button></div></div>
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://i.ibb.co/hJbL1CyT/image.jpg');"></div><div class="folder-content"><h3>DARSHANA UKUWELA</h3><button class="view-btn" onclick="openDarshana()">Open Folder</button></div></div>
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://echem.lk/images/gallery/class/gallery-2.jpg');"></div><div class="folder-content"><h3>AMILA DASSANAYAKE</h3><button class="view-btn" onclick="openAmila()">Open Folder</button></div></div>
+            </div>
+        </div>
+
+        <div id="darshana-view" style="display:none">
+            <div class="section-title">DARSHANA UKUWELA - PHYSICS</div>
+            <div class="folder-grid">
+                <div class="folder-card" style="border: 1px solid var(--neon);"><div class="folder-thumb" style="background-image: url('https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.Wr4LXPlYT5EaGeeQ-ZletwHaEL%3Fpid%3DApi&sp=1772747227T5cefd7a813f4986c7fcd780b8150118ee80bd2570e5f063a128ea6c796955351');"></div><div class="folder-content"><h3>📚 SUMMARY BOOKS</h3><button class="view-btn" onclick="openSummaryBooks()">Open Books</button></div></div>
+                <div class="folder-card" style="border: 1px solid #ffcc00;"><div class="folder-thumb" style="background-image: url('https://ibb.co/N2sJBDs8');"></div><div class="folder-content"><h3>Theory Session</h3><button class="view-btn" onclick="openTheorySession()">Open Folder</button></div></div>
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://i.ibb.co/hJbL1CyT/image.jpg');"></div><div class="folder-content"><h3>ධාරා විද්‍යුතය Session</h3><button class="view-btn" onclick="openDaraSession()">Open Folder</button></div></div>
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/i-r4erXKQsM/hqdefault.jpg');"></div><div class="folder-content"><h3>කාර්යය, ශක්තිය, බලය</h3><button class="view-btn" onclick="playMedia('youtube', 'i-r4erXKQsM')">Watch</button></div></div>
+            </div>
+            <button class="view-btn" style="width:120px;" onclick="resetLibrary()">← BACK</button>
+        </div>
+
+        <div id="amila-view" style="display:none">
+            <div class="section-title">AMILA DASSANAYAKE - CHEMISTRY</div>
+            <div class="folder-grid">
+                <div class="folder-card" style="border: 1px solid #ffcc00;"><div class="folder-thumb" style="background-image: url('https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.lwlAQnTx5pdvfOVNwdm1CQHaE8%3Fpid%3DApi&sp=1772746703T5aac1f6c6dc6f6450a14c37c66c8320ebf48d40dfb30d0320073c6dbdf4e866d');"></div><div class="folder-content"><h3>📁 රසායනික ගණනය කිරීම්</h3><button class="view-btn" onclick="openAmilaCalculations()">Open Folder</button></div></div>
+                
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/jQO6kRVmW2Y/hqdefault.jpg');"></div><div class="folder-content"><h3>INORGANIC ආරම්භය | Part I</h3><button class="view-btn" onclick="playMedia('youtube', 'jQO6kRVmW2Y')">Watch</button></div></div>
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/aOrlVhRzkG8/hqdefault.jpg');"></div><div class="folder-content"><h3>INORGANIC ආරම්භය | Part II</h3><button class="view-btn" onclick="playMedia('youtube', 'aOrlVhRzkG8')">Watch</button></div></div>
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/M-OEdrqomuc/hqdefault.jpg');"></div><div class="folder-content"><h3>2026 Inorganic Day 4</h3><button class="view-btn" onclick="playMedia('youtube', 'M-OEdrqomuc')">Watch</button></div></div>
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/Ds0CStgHS3Q/hqdefault.jpg');"></div><div class="folder-content"><h3>Chemistry Session 2026.02.16</h3><button class="view-btn" onclick="playMedia('youtube', 'Ds0CStgHS3Q')">Watch</button></div></div>
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/mwPtpBn4gSo/hqdefault.jpg');"></div><div class="folder-content"><h3>Chemistry Session 2026.06.24</h3><button class="view-btn" onclick="playMedia('youtube', 'mwPtpBn4gSo')">Watch</button></div></div>
+            </div>
+            <button class="view-btn" style="width:120px;" onclick="resetLibrary()">← BACK</button>
+        </div>
+
+        <div id="amila-calculations-view" style="display:none">
+            <div class="section-title">රසායනික ගණනය කිරීම් - SESSIONS</div>
+            <div class="folder-grid">
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/lyHYcTfV_pI/hqdefault.jpg');"></div><div class="folder-content"><h3>රසායනික ගණනය කිරීම් |මවුල ආශ්‍රිත සිද්ධාන්ත| Day 01</h3><button class="view-btn" onclick="playMedia('youtube', 'lyHYcTfV_pI')">Watch</button></div></div>
+                
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/zLMOpG4609s/hqdefault.jpg');"></div><div class="folder-content"><h3> රසායනික ගණනය කිරීම්  Extra session | ස්ටොයිකියෝමිතිය ආශ්‍රිත සිද්ධාන්ත| Day 01</h3><button class="view-btn" onclick="playMedia('youtube', 'zLMOpG4609s')">Watch</button></div></div>
+
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/7L0rUkC9IjY/hqdefault.jpg');"></div><div class="folder-content"><h3>රසායනික ගණනය කිරීම් | සාන්ද්‍රණ හා තනුකකරණ | Day 02</h3><button class="view-btn" onclick="playMedia('youtube', '7L0rUkC9IjY')">Watch</button></div></div>
+                
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/VRE-D7cuITA/hqdefault.jpg');"></div><div class="folder-content"><h3> රසායනික ගණනය කිරීම් | ද්‍රාවණවල ප්‍රතිශත සංශුද්ධතා ආශ්‍රිත ගණනයන් | Day 02</h3><button class="view-btn" onclick="playMedia('youtube', 'VRE-D7cuITA')">Watch</button></div></div>
+                
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/S3URdw1MZF4/hqdefault.jpg');"></div><div class="folder-content"><h3> 2026 Revision රසායනික ගණනය කිරීම් | Day 3</h3><button class="view-btn" onclick="playMedia('youtube', 'S3URdw1MZF4')">Watch</button></div></div>
+                
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/5A1wLJgM4xQ/hqdefault.jpg');"></div><div class="folder-content"><h3> Past Papers | Week 01</h3><button class="view-btn" onclick="playMedia('youtube', '5A1wLJgM4xQ')">Watch</button></div></div>
+                
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/S3URdw1MZF4/hqdefault.jpg');"></div><div class="folder-content"><h3> රසායනික ගණනය DAY 03 |  අම්ල භෂ්ම අනුමාපන |</h3><button class="view-btn" onclick="playMedia('youtube', 'S3URdw1MZF4')">Watch</button></div></div>
+                
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/Swwr_vNYU5s/hqdefault.jpg');"></div><div class="folder-content"><h3>REDOX One Day Seminar </h3><button class="view-btn" onclick="playMedia('youtube', 'Swwr_vNYU5s')">Watch</button></div></div>
+                
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/cVOLxWiF6Rc/hqdefault.jpg');"></div><div class="folder-content"><h3>H2O2 ප්‍රතික්‍රිය තුලිත කිරිම</h3><button class="view-btn" onclick="playMedia('youtube', 'cVOLxWiF6Rc')">Watch</button></div></div>
+                
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/cLy7V5teBwU/hqdefault.jpg');"></div><div class="folder-content"><h3> Redox Extra session Redox |  පාඩමේ වැඩිදුර ගැටලු සාකච්ඡාව</h3><button class="view-btn" onclick="playMedia('youtube', 'cLy7V5teBwU')">Watch</button></div></div>
+                
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/9indLikG8gc/hqdefault.jpg');"></div><div class="folder-content"><h3> Redox වැඩිදුර කරුණු සාකච්ඡාව </h3><button class="view-btn" onclick="playMedia('youtube', '9indLikG8gc')">Watch</button></div></div>
+            </div>
+            <button class="view-btn" style="width:120px;" onclick="openAmila()">← BACK</button>
+
+        </div>
+
+        <div id="theory-session-view" style="display:none">
+            <div class="section-title">Theory Sessions - 2026.02.04</div>
+            <div class="folder-grid">
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/QqAEsQ_jDIo/hqdefault.jpg');"></div><div class="folder-content"><h3>2026.02.24 විද්‍යුත් ක්ශේත්‍ර  Part 04 I</h3><button class="view-btn" onclick="playWithAlert('QqAEsQ_jDIo')">Watch</button></div></div>
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/OvY3y_B_Rjw/hqdefault.jpg');"></div><div class="folder-content"><h3>2026.02.24 විද්‍යුත් ක්ශේත්‍ර  Part 04 II </h3><button class="view-btn" onclick="playWithAlert('OvY3y_B_Rjw')">Watch</button></div></div>
+            </div>
+            <button class="view-btn" style="width:120px;" onclick="openDarshana()">← BACK</button>
+        </div>
+
+        <div id="summary-books-view" style="display:none">
+            <div class="section-title">PHYSICS SUMMARY BOOKS</div>
+            <div class="resource-box">
+                <div class="pdf-grid">
+                    <a href="https://drive.google.com/file/d/1qBTIb0Ni-KXMzm9cJrHM7zdX_69T2eiY/view" target="_blank" class="pdf-link">යාන්ත්‍ර විද්‍යාව (SM) <span>PDF</span></a>
+                    <a href="https://drive.google.com/file/d/1NEZb5yGNT7aL8BdPKqEPtPTl31QBv9dj/view" target="_blank" class="pdf-link">යාන්ත්‍ර විද්‍යාව (EM) <span>PDF</span></a>
+                    <a href="https://drive.google.com/file/d/1LRmeYJ7V04QiOeVANniabrVUmAeNZir2/view" target="_blank" class="pdf-link">ආලෝකය (SM) <span>PDF</span></a>
+                    <a href="https://drive.google.com/file/d/1jEL2N00owefOxOBLqSmWaOpM0pCqaAVe/view" target="_blank" class="pdf-link">තාපය (SM) <span>PDF</span></a>
+                </div>
+            </div>
+            <button class="view-btn" style="width:120px;" onclick="openDarshana()">← BACK</button>
+        </div>
+
+        <div id="dara-session-view" style="display:none">
+            <div class="section-title">ධාරා විද්‍යුතය - FULL SESSIONS</div>
+            <div class="folder-grid">
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/MfEZ48Gd9hE/hqdefault.jpg');"></div><div class="folder-content"><h3>ධාරා විද්‍යුතය DAY 01</h3><button class="view-btn" onclick="playMedia('youtube', 'MfEZ48Gd9hE')">Watch</button></div></div>
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/1nQuRba9Yqc/hqdefault.jpg');"></div><div class="folder-content"><h3>ධාරා විද්‍යුතය DAY 02</h3><button class="view-btn" onclick="playMedia('youtube', '1nQuRba9Yqc')">Watch</button></div></div>
+                <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/0NiXrjA8gnA/hqdefault.jpg');"></div><div class="folder-content"><h3>ධාරා විද්‍යුතය DAY 03</h3><button class="view-btn" onclick="playMedia('youtube', '0NiXrjA8gnA')">Watch</button></div></div>
+                 <div class="folder-card"><div class="folder-thumb" style="background-image: url('https://img.youtube.com/vi/lfkqvYR5r9w/hqdefault.jpg');"></div><div class="folder-content"><h3>ධාරා විද්‍යුතය DAY 04</h3><button class="view-btn" onclick="playMedia('youtube', 'lfkqvYR5r9w')">Watch</button></div></div>
+            </div>
+            <button class="view-btn" style="width:120px;" onclick="openDarshana()">← BACK</button>
+        </div>
+
+        <div id="player-view" style="display:none">
+            <div class="video-wrapper"><iframe id="main-iframe" allowfullscreen allow="autoplay"></iframe></div>
+            <button class="view-btn" style="width:180px; margin-top:30px;" onclick="backToFolder()">← BACK TO LIST</button>
+        </div>
+    </div>
+
+    <div id="contact" class="page-section">
+        <div class="section-title">Contact Support</div>
+        <div style="max-width: 400px; margin: auto;">
+            <a href="https://t.me/cyberdtwebloginbot" target="_blank" class="contact-link">✈ Telegram Support Bot</a>
+            <a href="https://t.me/cyberdt1" target="_blank" class="contact-link">📢 Official Channel</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ACCESS_KEYS = ["CYBERDT2026", "Mother1"];
+
+    const LIVE_ID = "0NiXrjA8gnA"; 
+    let currentMode = "main";
+
+    function checkPassword() {
+        const userInput = document.getElementById('passInput').value;
+        if (ACCESS_KEYS.includes(userInput)) {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('content-screen').style.display = 'block';
+            document.getElementById('nav-tabs').style.display = 'flex';
+            document.getElementById('watermark').style.display = 'block';
+            startWatermark();
+            updateLive();
+        } else { alert("Invalid Key!"); }
+    }
+
+    function requestKey() {
+        const name = document.getElementById('regName').value;
+        if(!name) { alert("Enter Name!"); return; }
+        window.open(`https://t.me/cyberdtwebloginbot?text=Hello, I am ${name}. Give me a Key.`, '_blank');
+    }
+
+    function showPage(p) {
+        document.getElementById('main-iframe').src = "";
+        document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-bar a').forEach(a => a.classList.remove('active'));
+        document.getElementById(p).classList.add('active');
+        document.getElementById('btn-' + p).classList.add('active');
+        if(p === 'videos') resetLibrary();
+    }
+
+    function updateLive() {
+        const container = document.getElementById('live-container');
+        if (LIVE_ID) {
+            container.innerHTML = `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${LIVE_ID}?autoplay=1" allowfullscreen></iframe></div>`;
+        } else {
+            container.innerHTML = `<div style="padding:40px; background:#0a0a12; border-radius:15px; color:#555;">NO LIVE STREAMING NOW</div>`;
+        }
+    }
+
+    function hideAll() {
+        const ids = ['main-library-view', 'amila-view', 'amila-calculations-view', 'darshana-view', 'dara-session-view', 'summary-books-view', 'theory-session-view', 'player-view'];
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.style.display = 'none';
+        });
+    }
+
+    function resetLibrary() { hideAll(); document.getElementById('main-library-view').style.display = 'block'; currentMode = "main"; }
+    function openAmila() { hideAll(); document.getElementById('amila-view').style.display = 'block'; currentMode = "amila"; }
+    function openAmilaCalculations() { hideAll(); document.getElementById('amila-calculations-view').style.display = 'block'; currentMode = "amila-calc"; }
+    function openDarshana() { hideAll(); document.getElementById('darshana-view').style.display = 'block'; currentMode = "darshana"; }
+    function openSummaryBooks() { hideAll(); document.getElementById('summary-books-view').style.display = 'block'; currentMode = "summary-books"; }
+    function openDaraSession() { hideAll(); document.getElementById('dara-session-view').style.display = 'block'; currentMode = "dara-session"; }
+    function openTheorySession() { hideAll(); document.getElementById('theory-session-view').style.display = 'block'; currentMode = "theory-session"; }
+
+    function playMedia(type, id) {
+        showPage('videos');
+        hideAll();
+        document.getElementById('player-view').style.display = 'block';
+        document.getElementById('main-iframe').src = type === 'youtube' ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : `https://player.vimeo.com/video/${id}?autoplay=1`;
+    }
+
+    function playWithAlert(id) {
+        alert("⚠️ Technical network issue එකක් හේතුවෙන් මෙම වීඩියෝවේ විනාඩි 2ක පමණ කොටසක් අඩුවී ඇති බව කරුණාවෙන් සලකන්න.");
+        playMedia('youtube', id);
+    }
+
+    function backToFolder() {
+        document.getElementById('main-iframe').src = "";
+        if(currentMode === "summary-books") openSummaryBooks();
+        else if(currentMode === "dara-session") openDaraSession();
+        else if(currentMode === "theory-session") openTheorySession();
+        else if(currentMode === "darshana") openDarshana();
+        else if(currentMode === "amila") openAmila();
+        else if(currentMode === "amila-calc") openAmilaCalculations();
+        else resetLibrary();
+    }
+
+    function startWatermark() {
+        const wm = document.getElementById('watermark');
+        setInterval(() => {
+            wm.style.left = Math.random() * (window.innerWidth - 150) + 'px';
+            wm.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+        }, 4000);
+    }
+</script>
 </body>
 </html>
